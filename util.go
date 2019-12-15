@@ -1,0 +1,5 @@
+package soonsocks
+
+func ReadConfig() {
+
+}
