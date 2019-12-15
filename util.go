@@ -1,5 +1,1 @@
 package soonsocks
-
-func ReadConfig() {
-
-}

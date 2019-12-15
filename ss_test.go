@@ -3,6 +3,7 @@ package soonsocks
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"golang.org/x/net/proxy"
 	"net"
 	"net/http"
@@ -12,7 +13,12 @@ import (
 )
 
 func TestSSLocal(t *testing.T) {
-	dialer, err := proxy.SOCKS5("tcp", "127.0.0.1:7891", nil, &net.Dialer{
+	configPath := "./testdata/config.json"
+	config, err := ParseConfig(configPath)
+
+	require.Nil(t, err)
+
+	dialer, err := proxy.SOCKS5("tcp", config.LocalAddr, nil, &net.Dialer{
 		Timeout:   30 * time.Second,
 		KeepAlive: 30 * time.Second,
 	})

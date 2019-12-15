@@ -1,7 +1,7 @@
 {
 	"server_addr": ":8089",
 	"password": "password",
-	"local_addr": ":6009",
+	"local_addr": ":7891",
 	"method": "aes-128-cfb",
 	"timeout": 300
 }
