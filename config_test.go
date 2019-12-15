@@ -22,11 +22,20 @@ func TestParseConfig(t *testing.T) {
 		config, err = ParseConfig(configPath)
 		require.Nil(t, err)
 
-		assert.Equal(t, sourceConfig.LocalAddr, config.LocalAddr)
-		assert.Equal(t, sourceConfig.ServerAddr, config.ServerAddr)
-		assert.Equal(t, sourceConfig.Password, config.Password)
-		assert.Equal(t, sourceConfig.Method, config.Method)
-		assert.Equal(t, sourceConfig.Timeout, config.Timeout)
+		var tests = []struct{
+			expected interface{}
+			actual interface{}
+		}{
+			{sourceConfig.LocalAddr, config.LocalAddr},
+			{sourceConfig.ServerAddr, config.ServerAddr},
+			{sourceConfig.Password, config.Password},
+			{sourceConfig.Method, config.Method},
+			{sourceConfig.Timeout, config.Timeout},
+		}
+
+		for _, test := range tests {
+			assert.Equal(t, test.expected, test.actual)
+		}
 	})
 	
 	t.Run("default value", func(t *testing.T) {
@@ -34,10 +43,19 @@ func TestParseConfig(t *testing.T) {
 		config, err := ParseConfig("")
 		require.Nil(t, err)
 
-		assert.Equal(t, defaultServerAddr, config.ServerAddr)
-		assert.Equal(t, defaultLocalAddr, config.LocalAddr)
-		assert.Equal(t, defaultPassword, config.Password)
-		assert.Equal(t, defaultMethod, config.Method)
-		assert.Equal(t, defaultTimeout, config.Timeout)
+		var tests = []struct{
+			expected interface{}
+			actual interface{}
+		}{
+			{defaultLocalAddr, config.LocalAddr},
+			{defaultServerAddr, config.ServerAddr},
+			{defaultPassword, config.Password},
+			{defaultMethod, config.Method},
+			{defaultTimeout, config.Timeout},
+		}
+
+		for _, test := range tests {
+			assert.Equal(t, test.expected, test.actual)
+		}
 	})
 }
