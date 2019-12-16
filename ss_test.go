@@ -1,13 +1,11 @@
 package soonsocks
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/net/proxy"
 	"net"
 	"net/http"
-	"os"
 	"testing"
 	"time"
 )
@@ -33,9 +31,6 @@ func TestSSLocal(t *testing.T) {
 	}
 
 	response, err := client.Get("http://www.google.com/")
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	require.Nil(t, err)
 	assert.Equal(t, "200 OK", response.Status, "The SSLocal couldn't use")
 }

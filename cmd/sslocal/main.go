@@ -7,7 +7,7 @@ import (
 )
 
 func handleConnection(conn net.Conn) {
-
+	ss.HandleShake(conn)
 }
 
 func main() {
@@ -19,10 +19,12 @@ func main() {
 	if err != nil {
 		ss.Logger.Fatalf("parse %s failed %v \n", configPath, err)
 	}
-	ss.Logger.Printf("config info: " +
-		"\n--------------------------------\n" +
-		"LocalAddr: %v\nServerAddr: %v\nMethod: %v" +
-		"\n--------------------------------\n",
+	ss.Logger.Printf("config info: \n" +
+		"--------------------------------\n" +
+		"LocalAddr: %v\n" +
+		"ServerAddr: %v\n" +
+		"Method: %v\n" +
+		"--------------------------------\n",
 		config.LocalAddr,
 		config.ServerAddr,
 		config.Method)
