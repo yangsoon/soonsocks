@@ -64,6 +64,12 @@ func extractNegotiation(conn net.Conn) (socks5n Socks5Negotiation, err error) {
 	}
 
 	nmethods := int(buf[idxNofMethods])
+
+	if nmethods > 1 {
+		err = errMethod
+		return
+	}
+
 	msgLen := nmethods + 2
 	if n == msgLen {
 		// do nothing
@@ -137,6 +143,9 @@ func extractRequest(conn net.Conn) (socks5r Socks5Request, err error) {
 		reqLen = lenIPv6
 	case typeDm:
 		reqLen = int(buf[idxDmLen]) + lenDmBase
+	default:
+		err = errAddrType
+		return
 	}
 
 	if n == reqLen {

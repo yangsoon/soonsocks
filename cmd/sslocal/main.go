@@ -7,7 +7,12 @@ import (
 )
 
 func handleConnection(conn net.Conn) {
-	ss.HandleShake(conn)
+	rawaddr, host, err := ss.HandleShake(conn)
+	if err != nil {
+		ss.Logger.Printf("socks negotiate host %s error: %v", host, err)
+	}
+
+
 }
 
 func main() {
