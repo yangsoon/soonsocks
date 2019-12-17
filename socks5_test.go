@@ -28,7 +28,7 @@ func TestHandleShake(t *testing.T) {
 
 		for {
 			conn, err := lis.Accept()
-			require.Nil(t, err)
+			assert.Nil(t, err)
 
 			_, host, err := HandleShake(conn)
 			require.Nil(t, err)
