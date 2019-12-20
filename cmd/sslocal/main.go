@@ -3,8 +3,15 @@ package main
 import (
 	"flag"
 	ss "github.com/yangsoon/soonsocks"
+	"math/rand"
 	"net"
+	"time"
 )
+
+func init() {
+	rand.Seed(time.Now().Unix())
+}
+
 
 func handleConnection(conn net.Conn) {
 	rawaddr, host, err := ss.HandleShake(conn)

@@ -3,7 +3,11 @@ package soonsocks
 import (
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/rand"
 	"crypto/rc4"
+	"errors"
+	"fmt"
+	"io"
 )
 
 type Cipher struct {
@@ -43,6 +47,48 @@ func newAESCFBStream(key, iv []byte, isEncrypt bool) (cipher.Stream, error){
 	return cipher.NewCFBDecrypter(block, iv), nil
 }
 
-func NewCipher(method, passwd string) (*Cipher, error) {
+func NewCipher(method, password string) (*Cipher, error) {
+	c := new(Cipher)
+	info, ok := cipherMethods[method]
+	if !ok {
+		return nil, errors.New(fmt.Sprintf("method unsupported %v", method))
+	}
+	c.info = info
+	key := generateKey(password, c.info.keyLen)
+	c.method = method
+	c.key = key
+	return  c, nil
+}
 
+func (c *Cipher) initDecrypt(iv []byte) (err error) {
+	c.dec, err = c.info.newStream(c.key, iv, false)
+	return err
+}
+
+func (c *Cipher) initEncrypt() (err error) {
+	if c.iv == nil {
+		ivLen := c.info.ivLen
+		iv := make([]byte, ivLen)
+		if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+			panic(err)
+		}
+		c.iv = iv
+	}
+	c.enc, err = c.info.newStream(c.key, c.iv, true)
+	return err
+}
+
+func (c *Cipher) Encrypt(dst, src []byte) {
+	c.enc.XORKeyStream(dst, src)
+}
+
+func (c *Cipher) Decrypt(dst, src []byte) {
+	c.dec.XORKeyStream(dst, src)
+}
+
+func (c *Cipher) Clone() *Cipher {
+	nc := *c
+	nc.dec = nil
+	nc.enc = nil
+	return &nc
 }
