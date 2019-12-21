@@ -8,6 +8,9 @@ import (
 	"time"
 )
 
+var config *ss.Config
+
+
 func init() {
 	rand.Seed(time.Now().Unix())
 }
@@ -16,10 +19,34 @@ func init() {
 func handleConnection(conn net.Conn) {
 	rawaddr, host, err := ss.HandleShake(conn)
 	if err != nil {
-		ss.Logger.Printf("socks negotiate host %s error: %v", host, err)
+		ss.Logger.Printf("socks negotiate host %s error: %v\n", host, err)
+		return
 	}
 
+	cipher, err := ss.NewCipher(config.Method, config.Password)
+	if err != nil {
+		ss.Logger.Printf("create cipher error: %v\n", err)
+		return
+	}
 
+	serverCConn, err := ss.DialWithCipher(config.ServerAddr, cipher.Clone())
+	if err != nil {
+		ss.Logger.Printf("connect to server %s error: %v\n", config.ServerAddr, err)
+		return
+	}
+	defer serverCConn.Close()
+
+	_, err = serverCConn.Write(rawaddr)
+	if err != nil {
+		ss.Logger.Printf("write to server %s error: %v\n", config.ServerAddr, err)
+	}
+
+	go func() {
+		defer conn.Close()
+		ss.CopyBuffer(conn, serverCConn)
+	}()
+
+	ss.CopyBuffer(serverCConn, conn)
 }
 
 func main() {
