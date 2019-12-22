@@ -11,6 +11,8 @@
 
 > A simple shadowsocks proxy implemented in golang
 
+![](./img/soonsocks.png)
+
 ### 🏠 [Homepage](https://yangsoon.github.io/#/posts/39)
 
 ## Install
