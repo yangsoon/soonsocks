@@ -11,18 +11,18 @@
 
 > A simple shadowsocks proxy implemented in golang
 
-### 🏠 [Homepage](https://github.com/yangsoon/soonsocks)
+### 🏠 [Homepage](https://yangsoon.github.io/#/posts/39)
 
 ## Install
 
 ```sh
-go run ./cmd/sserver/main.go
+go mod download
 ```
 
 ## Usage
 
 ```sh
-./sserver -c config.json
+cd cmd/ssserver && go build -o sserver && ./sserver -c ../../testdata/config.json
 ```
 
 ## Author
