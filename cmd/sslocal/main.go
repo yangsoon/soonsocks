@@ -3,18 +3,10 @@ package main
 import (
 	"flag"
 	ss "github.com/yangsoon/soonsocks"
-	"math/rand"
 	"net"
-	"time"
 )
 
 var config *ss.Config
-
-
-func init() {
-	rand.Seed(time.Now().Unix())
-}
-
 
 func handleConnection(conn net.Conn) {
 	rawaddr, host, err := ss.HandleShake(conn)
@@ -24,6 +16,7 @@ func handleConnection(conn net.Conn) {
 	}
 
 	cipher, err := ss.NewCipher(config.Method, config.Password)
+
 	if err != nil {
 		ss.Logger.Printf("create cipher error: %v\n", err)
 		return
@@ -34,8 +27,8 @@ func handleConnection(conn net.Conn) {
 		ss.Logger.Printf("connect to server %s error: %v\n", config.ServerAddr, err)
 		return
 	}
-	defer serverCConn.Close()
 
+	ss.Logger.Printf("connecting to server %v (request host %v)\n", config.ServerAddr, host)
 	_, err = serverCConn.Write(rawaddr)
 	if err != nil {
 		ss.Logger.Printf("write to server %s error: %v\n", config.ServerAddr, err)
@@ -43,10 +36,17 @@ func handleConnection(conn net.Conn) {
 
 	go func() {
 		defer conn.Close()
-		ss.CopyBuffer(conn, serverCConn)
+		_, err := ss.CopyBuffer(conn, serverCConn)
+		if err != nil {
+			ss.Logger.Printf("connecting to %v error: %v\n", host, err)
+		}
 	}()
 
-	ss.CopyBuffer(serverCConn, conn)
+	_, err = ss.CopyBuffer(serverCConn, conn)
+	if err != nil {
+		ss.Logger.Printf("connecting to %v error: %v", host, err)
+	}
+	serverCConn.Close()
 }
 
 func main() {
@@ -54,15 +54,17 @@ func main() {
 	flag.StringVar(&configPath, "c", "config.json", "json file with config")
 	flag.Parse()
 
-	config, err := ss.ParseConfig(configPath)
+	var err error
+	config, err = ss.ParseConfig(configPath)
 	if err != nil {
 		ss.Logger.Fatalf("parse %s failed %v \n", configPath, err)
 	}
-	ss.Logger.Printf("config info: \n" +
-		"--------------------------------\n" +
-		"LocalAddr: %v\n" +
-		"ServerAddr: %v\n" +
-		"Method: %v\n" +
+	ss.Logger.Printf("SSLocal is running at %v\n", config.LocalAddr)
+	ss.Logger.Printf("config info: \n"+
+		"--------------------------------\n"+
+		"LocalAddr: %v\n"+
+		"ServerAddr: %v\n"+
+		"Method: %v\n"+
 		"--------------------------------\n",
 		config.LocalAddr,
 		config.ServerAddr,

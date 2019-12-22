@@ -30,7 +30,7 @@ func TestSSLocal(t *testing.T) {
 		Transport: transport,
 	}
 
-	response, err := client.Get("http://www.google.com/")
+	response, err := client.Get("http://www.baidu.com")
 	require.Nil(t, err)
 	assert.Equal(t, "200 OK", response.Status, "The SSLocal couldn't use")
 }

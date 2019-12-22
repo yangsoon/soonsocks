@@ -3,5 +3,5 @@
 	"password": "password",
 	"local_addr": ":7892",
 	"method": "aes-128-cfb",
-	"timeout": 300
+	"timeout": 5
 }

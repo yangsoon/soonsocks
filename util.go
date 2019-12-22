@@ -5,9 +5,11 @@ import (
 	"io"
 	"log"
 	"os"
+	mrand "math/rand"
+	"crypto/rand"
 )
 
-var Logger = log.New(os.Stdout, "SSLogger: ", log.Ldate | log.Ltime)
+var Logger = log.New(os.Stdout, "SSLogger: ", log.Ldate | log.Ltime| log.Lshortfile | log.LstdFlags)
 
 func md5sum(b []byte) []byte {
 	h := md5.New()
@@ -61,4 +63,16 @@ func CopyBuffer(dst io.Writer, src io.Reader) (n int64, err error) {
 		}
 	}
 	return
+}
+
+func WriteRandomData(conn io.Writer) error {
+	rlen := mrand.Int() % 8767
+	data := make([]byte, rlen)
+	_, err := io.ReadFull(rand.Reader, data)
+	if err != nil {
+		return err
+	}
+
+	_, err = conn.Write(data)
+	return err
 }
