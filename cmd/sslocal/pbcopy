@@ -1,6 +1,0 @@
-SSLogger: 2019/12/22 13:16:34 main.go:57: config info: 
---------------------------------
-LocalAddr: :7892
-ServerAddr: :8089
-Method: aes-128-cfb
---------------------------------
