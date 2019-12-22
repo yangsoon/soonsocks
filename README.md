@@ -11,7 +11,7 @@
 
 > A simple shadowsocks proxy implemented in golang
 
-![](./img/soonsocks.png)
+<div align="center"><img src="./img/soonsocks.png"/></div>
 
 ### 🏠 [Homepage](https://yangsoon.github.io/#/posts/39)
 
