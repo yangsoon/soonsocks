@@ -13,7 +13,7 @@
 
 <div align="center"><img src="./img/soonsocks.png"/></div>
 
-### 🏠 [Homepage](https://yangsoon.github.io/#/posts/39)
+### 🏠 [Soonsock Golang实现的轻量级Shadowsocks](https://yangsoon.github.io/#/posts/39)
 
 ## Install
 
