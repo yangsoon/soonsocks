@@ -27,8 +27,6 @@ cd cmd/ssserver && go build -o sserver && ./sserver -c ../../testdata/config.jso
 
 ## About
 
-![soonsocks](https://user-images.githubusercontent.com/29531394/71320953-fa18cd80-24ed-11ea-94fe-889613014c5f.png)
-
 本文将介绍一个简化版本的shadowsocks— **[soonsocks](https://github.com/yangsoon/soonsocks)** 的实现，soonsocks源于腾讯大佬[cssivision](https://github.com/cssivision/shadowsocks)的项目并做了部分修改使得更便于阅读和理解，项目对shadowsocks-go的实现进行了简化，只支持三种加密算法以及只支持一台服务器提供代理服务。下面本文将从socks5协议开始讲解soonsocks的实现，帮助大家更好的了解shadowsocks。
 
 如果您觉得文章不错，欢迎给项目一个star **[soonsocks](https://github.com/yangsoon/soonsocks)** 
